@@ -33,10 +33,14 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
     if (image_url) {
       filterImageFromURL(image_url).then((response) => {
-        res.sendFile(response);
-        res.on('finish', function() {
-          deleteLocalFiles([response]);
-        });
+        if (response != "no-photo") {
+          res.sendFile(response);
+          res.on('finish', function() {
+            deleteLocalFiles([response]);
+          });
+        } else {
+          res.status(404).send("image_url is not found.");
+        }
       });
     } else {
       res.status(404).send("image_url is not valid.");
